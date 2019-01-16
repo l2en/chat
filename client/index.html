@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="icon" href="http://img5.imgtn.bdimg.com/it/u=879322051,1508598502&fm=26&gp=0.jpg" sizes="32x32">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>chat</title>
+</head>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	.clr {
+		display: block;
+		overflow: hidden;
+		clear: both;
+		height: 0;
+		line-height: 0;
+		font-size: 0;
+	}
+
+	.chat-room {
+		border-radius: 5px;
+		border: 1px #848181 solid;
+		color: #000;
+		height: 400px;
+		width: 600px;
+		position: relative;
+	}
+
+	.chat-room-main {
+		height: calc(100% - 60px);
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+		padding-right: 5px;
+	}
+
+	/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+	::-webkit-scrollbar {
+		width: 2px;
+		height: 0;
+		background-color: #F5F5F5;
+	}
+
+	/*定义滚动条轨道 内阴影+圆角*/
+	::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: #F5F5F5;
+	}
+
+	/*定义滑块 内阴影+圆角*/
+	::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: rgb(230, 225, 225);
+	}
+
+	.chat-room-footer {
+		width: 100%;
+		height: 40px;
+		border-top: #848181 solid 1px;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		overflow: hidden;
+	}
+
+	.chat-room-footer-input {
+		width: 80%;
+		height: 100%;
+		border: 0;
+		outline: none;
+		font-size: 17px;
+		padding: 3px;
+		float: left;
+
+	}
+
+	.chat-room-footer-submit {
+		display: inline-block;
+		height: 100%;
+		background-color: black;
+		color: #fff;
+		font-size: 16px;
+		width: 20%;
+		float: left;
+		line-height: 40px;
+		text-align: center;
+		cursor: pointer;
+		user-select: none;
+	}
+</style>
+
+<body>
+	<fieldset class="chat-room">
+		<legend style="text-align:center">小明</legend>
+		<div class="chat-room-main">
+		</div>
+		<div class="chat-room-footer">
+			<input class="chat-room-footer-input" value="" />
+			<span class="chat-room-footer-submit">发送</span>
+		</div>
+	</fieldset>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	var ws = new WebSocket("ws://localhost:9527");
+	ws.onopen = function (e) {
+		console.log('Connection to server opened', e);
+	}
+	window.onload = function () {
+		ws.onmessage = function (e) {
+			console.log(e.data);
+			backDOM(e.data);
+			$(".chat-room-main").scrollTop($(".chat-room-main")[0].scrollHeight);
+		}
+	}
+	$('.chat-room-footer-input').on('keydown', (e) => {
+		if (e.keyCode == 13) {
+			sendMessage($('.chat-room-footer-input').val())
+		}
+	})
+	$('.chat-room-footer-submit').on('click', () => {
+		sendMessage($('.chat-room-footer-input').val())
+		$('.chat-room-footer-input').val()
+	})
+	function sendMessage(text) {
+		if (!text) {
+			alert('未输入内容');
+			return;
+		}
+		ws.send(text);
+		sendDOM(text)
+		$('.chat-room-footer-input').val('');
+	}
+	function sendDOM(msg) {
+		var DOMSEND = `<div style="max-width: 500px;align-self: flex-end;margin-top: 10px;">
+										<p style="color:green;font-size: 13px;margin-bottom: 0;margin-top:0;float: right;">我&nbsp;14:52:30</p>
+										<span class="clr"></span>
+										<p style="margin-top: 0;margin-bottom: 0;display: flex;justify-content: flex-end;font-size: 14px;background: #00a3f0;
+											border-radius: 3px;
+											overflow: hidden;
+											padding: 5px;
+											color: #fff;">${msg}</p>
+									</div>`
+		$('.chat-room-main').append(DOMSEND)
+	}
+	function backDOM(msg) {
+		var DOMGET = `<div style="margin-top: 10px;">
+											<p style="color:blue;font-size: 13px;margin-bottom: 0;margin-top:0;float: left;">小明&nbsp;14:34:30</p>
+											<span class="clr"></span>
+											<p style="font-size: 14px;display: inline-block;margin-top: 0;margin-bottom: 0;max-width: 500px;text-align: left;font-size: 14px;background: #f4f7f9;
+												border-radius: 3px;
+												overflow: hidden;
+												padding: 5px;">${msg}</p>
+										</div>`;
+		$('.chat-room-main').append(DOMGET);
+	}
+</script>
+
+</html>
