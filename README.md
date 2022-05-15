@@ -1,6 +1,7 @@
 ![](./chat.gif)
 
 [<i>English</i>](./README_en.md)
+
 [<i>Demo</I>](https://chatforu-l2en.vercel.app/)
 ### 这是啥?
 > 这是一个使用纯js、css、html编写的聊天界面
