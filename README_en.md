@@ -2,6 +2,7 @@
 
 [<i>中文</i>](./README.md)
 
+[<i>Demo</I>](https://chatforu-l2en.vercel.app/)
 
 ### What's this?
 > this is a chat view, using by javascript、html、css.
