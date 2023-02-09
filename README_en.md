@@ -12,7 +12,7 @@
 <br/>
 
 ### What's can u do?
-> u can keep develop base on this app, using every tech whick u want. If u want, u can  refer to [THIS](https://github.com/l2en/electron-with-react16.10.2) made a desktop chat application.
+> u can keep develop base on this app, using every tech which u want. If u want, u can  refer to [THIS](https://github.com/l2en/electron-with-react16.10.2) made a desktop chat application.
 
 <br/>
 <br/>
